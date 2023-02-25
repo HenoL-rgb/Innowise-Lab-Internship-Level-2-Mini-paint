@@ -3,12 +3,12 @@ import Form from "../../components/Form/Form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useAppDispatch } from "../../hooks/redux-hooks";
 import { setUser } from "../../store/slices/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  
+
   function handleLogin(email: string, password: string) {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
@@ -22,7 +22,7 @@ export default function Login() {
             token: accessToken,
           }))
           localStorage.setItem('userInfo', JSON.stringify({...user, accessToken: accessToken}))
-          
+          navigate('/')
         })
       })
       .catch((error) => {
@@ -34,6 +34,7 @@ export default function Login() {
     <div>
       <h1>Sign in</h1>
       <Form handleClick={handleLogin} />
+      <Link to='/sign'>Register</Link>
     </div>
   );
 }

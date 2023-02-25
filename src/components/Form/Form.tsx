@@ -31,6 +31,8 @@ export default function Form({handleClick}: formPropsType) {
         type='password'
       />
       {errors.password && <span>{errors.password.message?.toString()}</span>}
+
+      <input type='submit' value='Submit'/>
     </form>
   );
 }
