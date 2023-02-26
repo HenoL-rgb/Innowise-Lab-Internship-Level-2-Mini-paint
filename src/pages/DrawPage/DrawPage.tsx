@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useId } from "react";
 import styled from "styled-components";
 import WidthSlider from "../../components/WidthSlider";
 import { useAppSelector } from "../../hooks/redux-hooks";
 import SideBar from "./SideBar";
 import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import SaveDialog from "../../components/SaveDialog";
+import { v4 as uuid } from "uuid";
 
 const DrawPageWrapper = styled.div`
   display: flex;
@@ -79,13 +80,16 @@ export default function DrawPage() {
   }, [currentShape]);
 
   async function handleSave(title: string) {
-    const storageRef = ref(storage, title);
+    const id = uuid();
+    const storageRef = ref(storage, `${user.email}/${id}`);
     const string = canvasRef.current?.toDataURL();
     if (!string) return;
 
     await addDoc(collection(db, "posts"), {
       user: user.email,
-      imageRef: title,
+      title: title,
+      imageRef: id,
+      createdAt: serverTimestamp(),
     });
 
     uploadString(storageRef, string, "data_url").then((snapshot) => {

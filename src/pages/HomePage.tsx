@@ -8,6 +8,8 @@ export const HomeWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  height: min-content;
+  padding-bottom: 50px;
 `
 export default function HomePage() {
   return (

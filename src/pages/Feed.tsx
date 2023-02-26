@@ -28,7 +28,6 @@ export default function Feed() {
   useEffect(() => {
     if (!snapshot) return;
     if (snapshot?.docChanges()) {
-      let image = "";
       const t: any[] = snapshot.docs.map((doc) => {
         return {
           ...doc.data(),
@@ -36,9 +35,9 @@ export default function Feed() {
         };
       });
 
-      const promises = t.map(async (user) => {
-        const url = await getDownloadURL(ref(storage, user.imageRef))
+      const promises = t.sort(compare).map(async (user) => {
         console.log(t)
+        const url = await getDownloadURL(ref(storage, `${user.user}/${user.imageRef}`))
         return {
           ...user,
           image: url,
@@ -48,11 +47,24 @@ export default function Feed() {
     }
   }, [docs]);
 
+  function compare(a: any,b: any) {
+    let date1 = a.createdAt.seconds
+    let date2 = b.createdAt.seconds;
+
+    if(date1 < date2){
+      return 1;
+    }
+    if(date1 > date2){
+      return -1;
+    }
+
+    return 0;
+  }
   return posts.length === 0 ? (
     <h1>Loading</h1>
   ) : (
     <PostsWrapper>
-      {posts.map(user => <Post name={user.user} title={user.imageRef} image={user.image} />)}
+      {posts.map(user => <Post name={user.user} title={user.title} image={user.image} />)}
     </PostsWrapper>
   );
 }
