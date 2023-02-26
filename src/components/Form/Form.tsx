@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { StyledForm } from "./FormStyles";
 
 type formPropsType = {
   handleClick: (email: string, password: string) => void;
@@ -16,7 +17,7 @@ export default function Form({handleClick}: formPropsType) {
     handleClick(data.email, data.password)
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <input
         {...register("email", {
           required: "Invalid email",
@@ -33,6 +34,6 @@ export default function Form({handleClick}: formPropsType) {
       {errors.password && <span>{errors.password.message?.toString()}</span>}
 
       <input type='submit' value='Submit'/>
-    </form>
+    </StyledForm>
   );
 }

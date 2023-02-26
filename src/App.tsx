@@ -4,7 +4,7 @@ import "./App.css";
 import Header from "./components/Header";
 import { useAppDispatch } from "./hooks/redux-hooks";
 import { useAuth } from "./hooks/useAuth";
-import DrawPage from "./pages/DrawPage";
+import DrawPage from "./pages/DrawPage/DrawPage";
 import Feed from "./pages/Feed";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login/Login";
