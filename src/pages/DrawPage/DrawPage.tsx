@@ -3,12 +3,14 @@ import styled from "styled-components";
 import WidthSlider from "../../components/WidthSlider";
 import { useAppSelector } from "../../hooks/redux-hooks";
 import SideBar from "./SideBar";
-
+import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import SaveDialog from "../../components/SaveDialog";
 
 const DrawPageWrapper = styled.div`
   display: flex;
   position: relative;
-  
 `;
 
 const CanvasWrapper = styled.div`
@@ -19,7 +21,7 @@ const CanvasWrapper = styled.div`
   canvas {
     border: 1px solid #3f5dab;
   }
-`
+`;
 
 type ShapeType = {
   line: {
@@ -46,6 +48,8 @@ export default function DrawPage() {
     y: 0,
   });
   const currentShape = useAppSelector((state) => state.figure);
+  const user = useAppSelector((state) => state.user);
+  const storage = getStorage();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
@@ -74,6 +78,21 @@ export default function DrawPage() {
     drawShape(contextRef.current, shapes);
   }, [currentShape]);
 
+  async function handleSave(title: string) {
+    const storageRef = ref(storage, title);
+    const string = canvasRef.current?.toDataURL();
+    if (!string) return;
+
+    await addDoc(collection(db, "posts"), {
+      user: user.email,
+      imageRef: title,
+    });
+
+    uploadString(storageRef, string, "data_url").then((snapshot) => {
+      console.log("Uploaded a data_url string!");
+    });
+  }
+
   return (
     <DrawPageWrapper>
       <SideBar handleClearClick={clearAll} />
@@ -85,6 +104,7 @@ export default function DrawPage() {
           ref={canvasRef}
         />
       </CanvasWrapper>
+      <SaveDialog handleSave={handleSave} />
     </DrawPageWrapper>
   );
 

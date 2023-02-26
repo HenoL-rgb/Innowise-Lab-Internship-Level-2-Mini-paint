@@ -8,8 +8,10 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { IconButton, Tooltip } from "@mui/material";
 
 export const HeaderStyled = styled.div`
-  position: relative;
+  position: sticky;
   display: flex;
+  top: 0px;
+  z-index: 10;
   align-items: center;
   justify-content: space-between;
   width: 100%;
