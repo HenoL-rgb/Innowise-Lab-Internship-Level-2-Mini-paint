@@ -5,7 +5,7 @@ import { useAppDispatch } from "../hooks/redux-hooks";
 import { removeUser, setUser } from "../store/slices/userSlice";
 import AccountMenu from "./AccountMenu";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 
 export const HeaderStyled = styled.div`
   position: relative;
@@ -49,9 +49,12 @@ export default function Header() {
         <Link to="/">Mini-paint</Link>
       </h2>
       <div>
-        <IconButton onClick={handleToDrawPage}>
-          <AddCircleOutlineIcon fontSize="medium" sx={{ color: "#0e235f" }} />
-        </IconButton>
+        <Tooltip title="Create art">
+          <IconButton onClick={handleToDrawPage}>
+            <AddCircleOutlineIcon fontSize="medium" sx={{ color: "#0e235f" }} />
+          </IconButton>
+        </Tooltip>
+
         <AccountMenu onClick={handleLogout} />
       </div>
     </HeaderStyled>

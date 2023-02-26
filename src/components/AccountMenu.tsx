@@ -1,5 +1,5 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -41,7 +41,9 @@ export default function AccountMenu({ onClick }: AccountMenuProps) {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32, backgroundColor: '#3dd3e2' }}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32, backgroundColor: "#3dd3e2" }}>
+              M
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>

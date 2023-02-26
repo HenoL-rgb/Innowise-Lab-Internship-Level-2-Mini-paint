@@ -1,84 +1,260 @@
 import React, { useState, useRef, useEffect } from "react";
+import styled from "styled-components";
+import WidthSlider from "../../components/WidthSlider";
+import { useAppSelector } from "../../hooks/redux-hooks";
+import SideBar from "./SideBar";
 
+
+const DrawPageWrapper = styled.div`
+  display: flex;
+  position: relative;
+  
+`;
+
+const CanvasWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  padding-top: 10px;
+  justify-content: center;
+  canvas {
+    border: 1px solid #3f5dab;
+  }
+`
+
+type ShapeType = {
+  line: {
+    start: {
+      x: number;
+      y: number;
+    };
+    end: {
+      x: number;
+      y: number;
+    };
+  };
+  figure: string;
+  color: string;
+  mode: string;
+  width: number;
+};
 export default function DrawPage() {
-  const [isDrawing, setIsDrawing] = useState(false);
+  const [shapes, setShapes] = useState<ShapeType[]>([]);
+  const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [dotted, setDotted] = useState<boolean>(true);
   const [start, setStart] = useState({
     x: 0,
     y: 0,
-  })
+  });
+  const currentShape = useAppSelector((state) => state.figure);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
+  const coordsRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
-    canvas.width = 700;
-    canvas.height = 700;
-    canvas.style.width = `${700}px`;
-    canvas.style.height = `${700}px`;
+    canvas.width = 800;
+    canvas.height = 800;
+    canvas.style.width = `${800}px`;
+    canvas.style.height = `${800}px`;
+    coordsRef.current = canvasRef.current?.getBoundingClientRect() ?? {
+      x: 0,
+      y: 0,
+    };
 
     if (!canvas) return;
     const context = canvas.getContext("2d");
     if (!context) return;
     context.lineCap = "round";
-    context.strokeStyle = "black";
-    context.lineWidth = 5;
+    context.strokeStyle = currentShape.color;
+    context.lineWidth = currentShape.width;
 
     contextRef.current = context;
+    drawShape(contextRef.current, shapes);
+  }, [currentShape]);
 
-  }, []);
+  return (
+    <DrawPageWrapper>
+      <SideBar handleClearClick={clearAll} />
+      <CanvasWrapper>
+        <canvas
+          onMouseDown={startDrawing}
+          onMouseUp={finishDrawing}
+          onMouseMove={draw}
+          ref={canvasRef}
+        />
+      </CanvasWrapper>
+    </DrawPageWrapper>
+  );
 
   function startDrawing(e: any) {
-    const offsetX = e.clientX - 8;
-    const offsetY = e.clientY - 8;
-    setStart({x: offsetX, y: offsetY});
-    contextRef.current?.beginPath();
-    contextRef.current?.moveTo(offsetX, offsetY);
+    const offsetX = e.clientX - coordsRef.current.x;
+    const offsetY = e.clientY - coordsRef.current.y;
+    setStart({ x: offsetX, y: offsetY });
     setIsDrawing(true);
   }
 
   function finishDrawing(e: any) {
-    const offsetX = e.clientX - 8;
-    const offsetY = e.clientY - 8;
-    contextRef.current?.closePath();
     setIsDrawing(false);
+    setDotted(true);
+    const offsetX = e.clientX - coordsRef.current.x;
+    const offsetY = e.clientY - coordsRef.current.y;
+    const line = {
+      start: { ...start },
+      end: {
+        x: offsetX,
+        y: offsetY,
+      },
+    };
+
+    const figure: ShapeType = {
+      line: { ...line },
+      figure: currentShape.figure,
+      color: currentShape.color,
+      mode: currentShape.mode,
+      width: currentShape.width,
+    };
+    setShapes((prev) => [...prev, figure]);
+    drawShape(contextRef.current, [...shapes, figure]);
+    contextRef.current?.beginPath();
   }
 
-  function drawLine(ctx: any, line: any) {
-    ctx.beginPath()
-    ctx.moveTo(line.start.x, line.start.y)
-    ctx.lineTo(line.end.x, line.end.y)
-    ctx.lineWidth = line.lineWidth
-    ctx.lineCap = line.lineCap
-    ctx.strokeStyle = line.strokeStyle
-    ctx.strokeRect(start.x, start.y, line.end.x - start.x, line.end.y - start.y)
+  function drawShape(ctx: any, shapes: ShapeType[]) {
+    clearCanvas(contextRef.current);
+    shapes.forEach((shape) => {
+      const line = shape.line;
+      const figure = shape.figure;
+      const color = shape.color;
+      const mode = shape.mode;
+      const width = shape.width;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(line.start.x, line.start.y);
+      ctx.lineTo(line.end.x, line.end.y);
+
+      switch (figure) {
+        case "line": {
+          ctx.stroke();
+          return;
+        }
+        case "rectangle": {
+          if (mode === "fill") {
+            ctx.fillStyle = color;
+            ctx.fillRect(
+              line.start.x,
+              line.start.y,
+              line.end.x - line.start.x,
+              line.end.y - line.start.y
+            );
+          } else {
+            ctx.strokeRect(
+              line.start.x,
+              line.start.y,
+              line.end.x - line.start.x,
+              line.end.y - line.start.y
+            );
+          }
+
+          return;
+        }
+        case "circle": {
+          ctx.beginPath();
+          ctx.ellipse(
+            line.start.x,
+            line.start.y,
+            Math.abs(line.start.x - line.end.x) / 2,
+            Math.abs(line.start.y - line.end.y) / 2,
+            0,
+            0,
+            2 * Math.PI
+          );
+          if (mode === "fill") {
+            ctx.fillStyle = color;
+            ctx.fill();
+          } else {
+            ctx.stroke();
+          }
+          return;
+        }
+        default: {
+          if (mode === "fill") {
+            ctx.fill();
+          } else {
+            ctx.stroke();
+          }
+        }
+      }
+    });
   }
 
   function draw(e: any) {
     if (!isDrawing) {
       return;
     }
-
-    const offsetX = e.clientX - 8;
-    const offsetY = e.clientY - 8;
-    contextRef.current?.clearRect(0,0, canvasRef.current!.width, canvasRef.current!.height)
+    setDotted(false);
+    const offsetX = e.clientX - coordsRef.current.x;
+    const offsetY = e.clientY - coordsRef.current.y;
     const line = {
-      start: {...start},
+      start: { ...start },
       end: {
         x: offsetX,
-        y: offsetY
+        y: offsetY,
+      },
+    };
+
+    if (currentShape.figure !== "pencil") {
+      const figure: ShapeType = {
+        line: { ...line },
+        figure: currentShape.figure,
+        color: currentShape.color,
+        mode: currentShape.mode,
+        width: currentShape.width,
+      };
+      if (dotted === false) {
+        setShapes((prev) =>
+          prev.filter((item, index) => index !== shapes.length - 1)
+        );
       }
+
+      setShapes((prev) => [...prev, figure]);
+      drawShape(contextRef.current, shapes);
+      return;
     }
-    drawLine(contextRef.current, line)
+
+    setStart({ x: offsetX, y: offsetY });
+    setShapes((prev) => [
+      ...prev,
+      {
+        line: { ...line },
+        figure: "line",
+        color: currentShape.color,
+        mode: currentShape.mode,
+        width: currentShape.width,
+      },
+    ]);
+
+    drawShape(contextRef.current, shapes);
   }
 
-  return (
-    <canvas
-      onMouseDown={startDrawing}
-      onMouseUp={finishDrawing}
-      onMouseMove={draw}
-      ref={canvasRef}
-    />
-  );
+  function clearCanvas(ctx: CanvasRenderingContext2D | undefined) {
+    ctx?.clearRect(
+      0,
+      0,
+      canvasRef.current?.width ?? 0,
+      canvasRef.current?.height ?? 0
+    );
+  }
+
+  function clearAll() {
+    contextRef.current?.clearRect(
+      0,
+      0,
+      canvasRef.current?.width ?? 0,
+      canvasRef.current?.height ?? 0
+    );
+    setShapes([]);
+    setIsDrawing(false);
+  }
 }
