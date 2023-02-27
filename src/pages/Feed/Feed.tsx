@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { useDownloadURL } from "react-firebase-hooks/storage";
 import { collection, query, Timestamp } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import userSlice from "../store/slices/userSlice";
-import Post from "../components/Post";
-import styled from "styled-components";
-import { useAppSelector } from "../hooks/redux-hooks";
+import Post from "../../components/Post/Post";
+import { useAppSelector } from "../../hooks/redux-hooks";
 import { Grid } from "react-loader-spinner";
+import { LoadWrapper, PostsWrapper } from "./FeedStyles";
 
 type UserType = {
   user: string;
@@ -20,22 +18,6 @@ type UserType = {
 type PostType = UserType & {
   image: string;
 };
-
-const PostsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 40px;
-  row-gap: 100px;
-  background-color: ${(props) => props.theme};
-`;
-
-const LoadWrapper = styled.div`
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export default function Feed() {
   const [posts, setPosts] = useState<PostType[]>([]);

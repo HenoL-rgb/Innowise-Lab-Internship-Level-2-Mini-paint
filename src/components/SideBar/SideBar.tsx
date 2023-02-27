@@ -15,32 +15,10 @@ import { setColor, setFigure, setMode } from "../../store/slices/figureSlice";
 import FormatPaintOutlinedIcon from '@mui/icons-material/FormatPaintOutlined';
 import FormatPaintIcon from '@mui/icons-material/FormatPaint';
 import Popover from "@mui/material/Popover/Popover";
-import WidthSlider from "../../components/WidthSlider";
-import SaveDialog from "../../components/SaveDialog";
+import WidthSlider from "../WidthSlider";
+import SaveDialog from "../SaveDialog";
+import { SideBarStyled } from "./SideBarStyles";
 
-const SideBarStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  
-  span {
-    width: min-content;
-  }
-  button {
-    margin-top: 15px;
-  }
-  input[name="colorPick"] {
-    background-color: transparent;
-    outline-color: transparent;
-    border: 1px solid #3f5dab;
-    width: 50px;
-    height: 30px;
-    border-radius: 5px;
-    padding: 1px;
-    cursor: pointer;
-  }
-`;
 
 const buttons = [
   {

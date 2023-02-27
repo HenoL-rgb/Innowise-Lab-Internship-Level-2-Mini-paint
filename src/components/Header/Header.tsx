@@ -1,9 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
-import { removeUser, setQuery, setUser } from "../store/slices/userSlice";
-import AccountMenu from "./AccountMenu";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux-hooks";
+import { removeUser, setQuery, setUser } from "../../store/slices/userSlice";
+import AccountMenu from "../AccountMenu";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, IconButton, TextField, Tooltip } from "@mui/material";
 import {
@@ -11,49 +10,10 @@ import {
   setFigure,
   setMode,
   setWidth,
-} from "../store/slices/figureSlice";
-import { setTheme } from "../store/slices/themeSlice";
+} from "../../store/slices/figureSlice";
+import { setTheme } from "../../store/slices/themeSlice";
+import { HeaderStyled } from "./HeaderStyles";
 
-export const HeaderStyled = styled.div`
-  position: sticky;
-  display: flex;
-  top: 0px;
-  z-index: 100;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 5px 50px;
-  background-color: ${(props) => props.theme.header.bg};
-  h2 {
-    font-size: 1.5rem;
-    color: ${(props) => props.theme.header.logo};
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-  }
-
-  & .css-v4u5dn-MuiInputBase-root-MuiInput-root:before {
-    border-bottom: 1px solid ${(props) => props.theme.header.font};
-  }
-
-  & .css-v4u5dn-MuiInputBase-root-MuiInput-root {
-    color: ${(props) => props.theme.header.font};
-  }
-
-  & .css-v4u5dn-MuiInputBase-root-MuiInput-root:hover:not(
-      .Mui-disabled,
-      .Mui-error
-    ):before {
-    border-bottom: 2px solid ${(props) => props.theme.header.font};
-  }
-
-  div {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-  }
-`;
 
 type HeaderProps = {
   theme: any;

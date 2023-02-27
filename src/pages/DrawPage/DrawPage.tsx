@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect, useId } from "react";
-import styled from "styled-components";
 import WidthSlider from "../../components/WidthSlider";
 import { useAppSelector } from "../../hooks/redux-hooks";
-import SideBar from "./SideBar";
+import SideBar from "../../components/SideBar/SideBar";
 import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
 import {
   addDoc,
@@ -14,23 +13,8 @@ import {
 import { db } from "../../firebase";
 import SaveDialog from "../../components/SaveDialog";
 import { v4 as uuid } from "uuid";
+import { DrawPageWrapper, CanvasWrapper } from "./DrawPageStyles";
 
-const DrawPageWrapper = styled.div`
-  display: flex;
-  position: relative;
-  background-color: ${props => props.theme.main};
-`;
-
-const CanvasWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  padding-top: 10px;
-  justify-content: center;
-  canvas {
-    border: 1px solid #3f5dab;
-    background-color: #ffffff;
-  }
-`;
 
 type ShapeType = {
   line: {
