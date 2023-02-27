@@ -4,7 +4,13 @@ import WidthSlider from "../../components/WidthSlider";
 import { useAppSelector } from "../../hooks/redux-hooks";
 import SideBar from "./SideBar";
 import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
-import { addDoc, collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import SaveDialog from "../../components/SaveDialog";
 import { v4 as uuid } from "uuid";
@@ -12,6 +18,7 @@ import { v4 as uuid } from "uuid";
 const DrawPageWrapper = styled.div`
   display: flex;
   position: relative;
+  background-color: ${props => props.theme.main};
 `;
 
 const CanvasWrapper = styled.div`
@@ -21,6 +28,7 @@ const CanvasWrapper = styled.div`
   justify-content: center;
   canvas {
     border: 1px solid #3f5dab;
+    background-color: #ffffff;
   }
 `;
 
@@ -40,6 +48,7 @@ type ShapeType = {
   mode: string;
   width: number;
 };
+
 export default function DrawPage() {
   const [shapes, setShapes] = useState<ShapeType[]>([]);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
@@ -55,6 +64,14 @@ export default function DrawPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
   const coordsRef = useRef({ x: 0, y: 0 });
+  const theme: string = useAppSelector((state) => state.theme.currentTheme);
+  const palette: { [key: string]: any } = useAppSelector((state) => {
+    if (theme === "light") {
+      return state.theme.light;
+    } else {
+      return state.theme.dark;
+    }
+  });
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -98,8 +115,12 @@ export default function DrawPage() {
   }
 
   return (
-    <DrawPageWrapper>
-      <SideBar handleClearClick={clearAll} handleSave={handleSave} />
+    <DrawPageWrapper theme={palette}>
+      <SideBar
+        handleClearClick={clearAll}
+        handleSave={handleSave}
+        theme={palette}
+      />
       <CanvasWrapper>
         <canvas
           onMouseDown={startDrawing}

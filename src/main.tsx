@@ -8,7 +8,6 @@ import App from "./App";
 import "./firebase";
 import "./index.css";
 import { store } from "./store";
-import CssBaseline from '@mui/material/CssBaseline';
 
 const Global = createGlobalStyle`
   * {
@@ -20,7 +19,6 @@ const Global = createGlobalStyle`
   body {
     display: flex;
     justify-content: center;
-    
   }
 `;
 

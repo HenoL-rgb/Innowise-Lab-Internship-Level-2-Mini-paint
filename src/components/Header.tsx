@@ -6,7 +6,13 @@ import { removeUser, setQuery, setUser } from "../store/slices/userSlice";
 import AccountMenu from "./AccountMenu";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, IconButton, TextField, Tooltip } from "@mui/material";
-import { setColor, setFigure, setMode, setWidth } from "../store/slices/figureSlice";
+import {
+  setColor,
+  setFigure,
+  setMode,
+  setWidth,
+} from "../store/slices/figureSlice";
+import { setTheme } from "../store/slices/themeSlice";
 
 export const HeaderStyled = styled.div`
   position: sticky;
@@ -17,14 +23,18 @@ export const HeaderStyled = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 5px 50px;
-  background-color: #f7f8fa;
+  background-color: ${(props) => props.theme.header.bg};
   h2 {
     font-size: 1.5rem;
-    color: #0e235f;
+    color: ${(props) => props.theme.header.logo};
     a {
       text-decoration: none;
       color: inherit;
     }
+  }
+
+  input {
+    color: ${props => props.theme.header.font};
   }
 
   div {
@@ -34,21 +44,25 @@ export const HeaderStyled = styled.div`
   }
 `;
 
-export default function Header() {
+type HeaderProps = {
+  theme: any;
+};
+export default function Header({ theme }: HeaderProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const query = useAppSelector((state) => state.user.query);
 
   function handleLogout() {
     dispatch(removeUser());
+    dispatch(setTheme('light'))
     localStorage.removeItem("userInfo");
   }
 
   function handleToDrawPage() {
-    dispatch(setFigure('pencil'));
-    dispatch(setColor('#000000'));
-    dispatch(setMode('fill'));
-    dispatch(setWidth('5'));
+    dispatch(setFigure("pencil"));
+    dispatch(setColor("#000000"));
+    dispatch(setMode("fill"));
+    dispatch(setWidth("5"));
     navigate("/draw");
   }
 
@@ -57,12 +71,14 @@ export default function Header() {
   }
 
   return (
-    <HeaderStyled>
+    <HeaderStyled theme={theme}>
       <h2>
         <Link to="/">Mini-paint</Link>
       </h2>
       <div>
-        <Box component="form" noValidate autoComplete="off">
+        <Box component="form" noValidate autoComplete="off" sx={{
+          color: theme.header.font
+        }}>
           <TextField
             value={query}
             size="small"
@@ -70,11 +86,15 @@ export default function Header() {
             variant="standard"
             placeholder="Search author"
             onChange={handleQuery}
+            color='primary'
           />
         </Box>
         <Tooltip title="Create art">
           <IconButton onClick={handleToDrawPage}>
-            <AddCircleOutlineIcon fontSize="medium" sx={{ color: "#0e235f" }} />
+            <AddCircleOutlineIcon
+              fontSize="medium"
+              sx={{ color: theme.header.buttons }}
+            />
           </IconButton>
         </Tooltip>
 

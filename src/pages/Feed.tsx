@@ -8,6 +8,7 @@ import userSlice from "../store/slices/userSlice";
 import Post from "../components/Post";
 import styled from "styled-components";
 import { useAppSelector } from "../hooks/redux-hooks";
+import { Grid } from "react-loader-spinner";
 
 type UserType = {
   user: string;
@@ -26,12 +27,29 @@ const PostsWrapper = styled.div`
   align-items: center;
   padding-top: 40px;
   row-gap: 100px;
+  background-color: ${(props) => props.theme};
 `;
+
+const LoadWrapper = styled.div`
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function Feed() {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [load, setIsLoad] = useState<boolean>(false);
   const inputQuery = useAppSelector((state) => state.user.query);
   const storage = getStorage();
+  const theme: string = useAppSelector((state) => state.theme.currentTheme);
+  const palette: { [key: string]: any } = useAppSelector((state) => {
+    if (theme === "light") {
+      return state.theme.light;
+    } else {
+      return state.theme.dark;
+    }
+  });
 
   const q = query(collection(db, "posts"));
   const [docs, loading, error, snapshot] = useCollectionData(q);
@@ -89,13 +107,25 @@ export default function Feed() {
   }
 
   return load || posts.length === 0 ? (
-    <h1>Loading</h1>
+    <LoadWrapper>
+      <Grid
+        height="80"
+        width="80"
+        color="#3f5dab"
+        ariaLabel="grid-loading"
+        radius="12.5"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+    </LoadWrapper>
   ) : (
-    <PostsWrapper>
+    <PostsWrapper theme={palette.main}>
       {posts
         .filter((user) => user.user.includes(inputQuery))
         .map((user) => (
           <Post
+            theme={palette}
             key={user.image}
             name={user.user}
             title={user.title}

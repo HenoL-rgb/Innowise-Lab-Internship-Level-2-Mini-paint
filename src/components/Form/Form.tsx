@@ -22,6 +22,7 @@ export default function Form({handleClick}: formPropsType) {
         {...register("email", {
           required: "Invalid email",
         })}
+        type='email'
       />
       {errors.email && <span>{errors.email.message?.toString()}</span>}
 

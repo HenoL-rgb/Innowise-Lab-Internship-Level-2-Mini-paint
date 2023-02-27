@@ -12,17 +12,19 @@ export const FormWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 30%;
-  padding: 0 30px;
+  width: 40%;
+  min-width: min-content;
+  padding: 0 60px;
   height: min-content;
   min-height: 600px;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(242, 119, 119, 0.4);
-  box-shadow: 0px 0px 5px rgba(242, 119, 119, 0.4);
+  border: 1px solid rgba(63, 93, 171, 0.4);
+  box-shadow: 0px 0px 5px #3f5dab;
   border-radius: 15px;
   row-gap: 20px;
   & span {
     color: red;
   }
+
 `;

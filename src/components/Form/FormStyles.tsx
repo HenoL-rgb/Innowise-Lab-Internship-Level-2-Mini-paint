@@ -9,6 +9,7 @@ export const StyledForm = styled.form`
   & input {
     width: 100%;
     max-width: 420px;
+    min-width:250px;
     padding: 10px 12px;
     outline: none;
     border-radius: 5px;
@@ -17,7 +18,7 @@ export const StyledForm = styled.form`
   }
   & input[type="submit"] {
     margin-top: 15px;
-    background-color: rgba(242,82,82);
+    background-color: #3f5dab;
     font-size: 18px;
     width: 30%;
     min-width: min-content;
@@ -25,7 +26,7 @@ export const StyledForm = styled.form`
     border: 0;
     cursor: pointer;
     &:active {
-      background-color: rgba(242,119,119);
+      background-color: #4064c0;
     }
   }
 `;

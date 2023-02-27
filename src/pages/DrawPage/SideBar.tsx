@@ -23,6 +23,7 @@ const SideBarStyled = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 10px;
+  
   span {
     width: min-content;
   }
@@ -66,10 +67,11 @@ const buttons = [
 
 type SideBarProps = {
   handleClearClick: () => void;
-  handleSave: (title: string) => void
+  handleSave: (title: string) => void;
+  theme: any;
 };
 
-export default function SideBar({ handleClearClick, handleSave }: SideBarProps) {
+export default function SideBar({ handleClearClick, handleSave, theme }: SideBarProps) {
   const shape = useAppSelector((state) => state.figure);
   const dispatch = useAppDispatch();
 
@@ -90,7 +92,7 @@ export default function SideBar({ handleClearClick, handleSave }: SideBarProps) 
   }
 
   return (
-    <SideBarStyled>
+    <SideBarStyled theme={theme}>
       {buttons.map((button) => (
         <Checkbox
           sx={{ color: "#3f5dab" }}
