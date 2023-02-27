@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../../firebase";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
   collection,
   limit,
@@ -20,9 +19,7 @@ import { PaletteType, PostType } from "../../types";
 export default function Feed() {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [load, setIsLoad] = useState<boolean>(false);
-  const [lastTimestamp, setLastTimestamp] = useState<any>(
-    new Date()
-  );
+  const [lastTimestamp, setLastTimestamp] = useState<any>(new Date());
   const inputQuery = useAppSelector((state) => state.user.query);
   const storage = getStorage();
   const theme: string = useAppSelector((state) => state.theme.currentTheme);
@@ -33,34 +30,31 @@ export default function Feed() {
       return state.theme.dark;
     }
   });
-  const q = query(
-    collection(db, "posts"),
-    where("createdAt", "<", lastTimestamp),
-    orderBy("createdAt", "desc"),
-    limit(10)
-  );
-  
-  const [docs, loading, error, snapshot] = useCollectionData(q);
+
   const lastElement = useRef<HTMLDivElement>(null);
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
-    if (!snapshot) return;
-    if (
-      snapshot.docs.at(-1)?.data().createdAt.seconds ===
-      posts.at(-1)?.createdAt.seconds
-    ) {
-      return;
-    }
+    const q = query(
+      collection(db, "posts"),
+      where("createdAt", "<", lastTimestamp),
+      orderBy("createdAt", "desc"),
+      limit(10)
+    );
 
     setIsLoad(true);
-    if (snapshot?.docChanges()) {
-      const t: any[] = snapshot.docs.map((doc) => {
-        return {
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const t: any[] = [];
+      querySnapshot.forEach((doc) => {
+        t.push({
           ...doc.data(),
           id: doc.id,
-        };
+        });
       });
+
+      if (t.at(-1).createdAt.seconds === posts.at(-1)?.createdAt.seconds) {
+        return;
+      }
 
       const promises = t.map(async (user) => {
         try {
@@ -86,13 +80,16 @@ export default function Feed() {
         setPosts([...posts, ...res]);
         setIsLoad(false);
       });
-    }
-  }, [snapshot]);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [lastTimestamp]);
 
   useEffect(() => {
     let callback = function (entries: any, observer: any) {
       if (entries[0].isIntersecting && posts.at(-1)) {
-        setLastTimestamp((posts.at(-1)?.createdAt ?? lastTimestamp ))
+        setLastTimestamp(posts.at(-1)?.createdAt ?? lastTimestamp);
       }
     };
     if (!lastElement.current || posts.length === 0) {
@@ -102,17 +99,9 @@ export default function Feed() {
     observer.current.observe(lastElement.current);
   }, [posts.length]);
 
-  useEffect(() => {
-    return () => {
-      setPosts([]);
-      setLastTimestamp(new Date());
-    }
-  }, [])
-
   return (
     <>
       <PostsWrapper theme={palette.main}>
-        
         {posts
           .filter((user) => user.user.includes(inputQuery))
           .map((user) => (
@@ -130,7 +119,7 @@ export default function Feed() {
             width: 20,
             height: "20px",
             marginBottom: 30,
-            //backgroundColor: 'red',
+            // backgroundColor: 'red',
             position: "absolute",
             bottom: 0,
           }}
