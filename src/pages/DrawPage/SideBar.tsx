@@ -16,6 +16,7 @@ import FormatPaintOutlinedIcon from '@mui/icons-material/FormatPaintOutlined';
 import FormatPaintIcon from '@mui/icons-material/FormatPaint';
 import Popover from "@mui/material/Popover/Popover";
 import WidthSlider from "../../components/WidthSlider";
+import SaveDialog from "../../components/SaveDialog";
 
 const SideBarStyled = styled.div`
   display: flex;
@@ -65,9 +66,10 @@ const buttons = [
 
 type SideBarProps = {
   handleClearClick: () => void;
+  handleSave: (title: string) => void
 };
 
-export default function SideBar({ handleClearClick }: SideBarProps) {
+export default function SideBar({ handleClearClick, handleSave }: SideBarProps) {
   const shape = useAppSelector((state) => state.figure);
   const dispatch = useAppDispatch();
 
@@ -112,7 +114,7 @@ export default function SideBar({ handleClearClick }: SideBarProps) {
       <Button key="clear" onClick={handleClear}>
         Clear
       </Button>
-      <Button key="share">Share</Button>
+      <SaveDialog handleSave={handleSave} />
     </SideBarStyled>
   );
 }

@@ -13,6 +13,7 @@ export const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 30%;
+  padding: 0 30px;
   height: min-content;
   min-height: 600px;
   justify-content: center;
@@ -21,4 +22,7 @@ export const FormWrapper = styled.div`
   box-shadow: 0px 0px 5px rgba(242, 119, 119, 0.4);
   border-radius: 15px;
   row-gap: 20px;
+  & span {
+    color: red;
+  }
 `;

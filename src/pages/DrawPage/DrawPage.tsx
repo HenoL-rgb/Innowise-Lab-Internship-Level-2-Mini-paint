@@ -99,7 +99,7 @@ export default function DrawPage() {
 
   return (
     <DrawPageWrapper>
-      <SideBar handleClearClick={clearAll} />
+      <SideBar handleClearClick={clearAll} handleSave={handleSave} />
       <CanvasWrapper>
         <canvas
           onMouseDown={startDrawing}
@@ -108,7 +108,6 @@ export default function DrawPage() {
           ref={canvasRef}
         />
       </CanvasWrapper>
-      <SaveDialog handleSave={handleSave} />
     </DrawPageWrapper>
   );
 

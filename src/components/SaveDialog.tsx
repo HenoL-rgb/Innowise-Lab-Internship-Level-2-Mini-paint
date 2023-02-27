@@ -36,8 +36,8 @@ export default function SaveDialog({ handleSave }: SaveDialogProps) {
   }
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Save
+      <Button onClick={handleClickOpen}>
+        Share
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Share</DialogTitle>

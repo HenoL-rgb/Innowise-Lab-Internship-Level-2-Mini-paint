@@ -1,3 +1,4 @@
+import { createTheme, ThemeProvider } from "@mui/material";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux/es/exports";
@@ -7,6 +8,7 @@ import App from "./App";
 import "./firebase";
 import "./index.css";
 import { store } from "./store";
+import CssBaseline from '@mui/material/CssBaseline';
 
 const Global = createGlobalStyle`
   * {
