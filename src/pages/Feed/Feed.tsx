@@ -52,7 +52,8 @@ export default function Feed() {
         });
       });
 
-      if (t.at(-1).createdAt.seconds === posts.at(-1)?.createdAt.seconds) {
+      if (t.at(-1).createdAt.seconds === posts.at(-1)?.createdAt.seconds
+      || t.length === 0) {
         return;
       }
 

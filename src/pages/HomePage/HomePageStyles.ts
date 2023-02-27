@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const HomeWrapper = styled.div`
   position: relative;
-  height: 100%;
+  height: max-content;
   width: 100%;
   display: flex;
   flex-direction: column;
