@@ -4,7 +4,9 @@ export const PostsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 40px;
+  position: relative;
+  height: max-content;
+  padding: 40px 0;
   row-gap: 100px;
   background-color: ${(props) => props.theme};
 `;

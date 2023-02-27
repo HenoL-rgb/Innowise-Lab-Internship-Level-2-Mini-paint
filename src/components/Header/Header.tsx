@@ -13,11 +13,8 @@ import {
 } from "../../store/slices/figureSlice";
 import { setTheme } from "../../store/slices/themeSlice";
 import { HeaderStyled } from "./HeaderStyles";
+import { HeaderProps, PaletteType } from "../../types";
 
-
-type HeaderProps = {
-  theme: any;
-};
 export default function Header({ theme }: HeaderProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

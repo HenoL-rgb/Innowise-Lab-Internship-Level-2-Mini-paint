@@ -1,32 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { ThemeType } from "../../types";
 
-type ThemeType = {
-    currentTheme: string,
-    light: {
-        main: string,
-        header: {
-            bg: string,
-            font: string,
-            buttons: string,
-            logo: string,
-        }
-        sidebar: {
-            buttons: string
-        }
-    }
-    dark: {
-        main: string,
-        header: {
-            bg: string,
-            font: string,
-            buttons: string,
-            logo: string,
-        }
-        sidebar: {
-            buttons: string
-        }
-    }
-}
+
 const initialState: ThemeType = {
     currentTheme: 'light',
     light: {

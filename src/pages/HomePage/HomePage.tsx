@@ -2,11 +2,12 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import { useAppSelector } from "../../hooks/redux-hooks";
+import { PaletteType } from "../../types";
 import { HomeWrapper } from "./HomePageStyles";
 
 export default function HomePage() {
   const theme: string = useAppSelector((state) => state.theme.currentTheme);
-  const palette: { [key: string]: any } = useAppSelector((state) => {
+  const palette: PaletteType = useAppSelector((state) => {
     if (theme === "light") {
       return state.theme.light;
     } else {

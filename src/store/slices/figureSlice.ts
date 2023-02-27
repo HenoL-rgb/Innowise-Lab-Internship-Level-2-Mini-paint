@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { FigureType } from "../../types";
 
-const initialState = {
+const initialState: FigureType = {
     figure: 'pencil',
     color: '#000000',
     mode: 'outline',

@@ -1,10 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { formPropsType } from "../../types";
 import { StyledForm } from "./FormStyles";
 
-type formPropsType = {
-  handleClick: (email: string, password: string) => void;
-}
+
 export default function Form({handleClick}: formPropsType) {
   const {
     register,

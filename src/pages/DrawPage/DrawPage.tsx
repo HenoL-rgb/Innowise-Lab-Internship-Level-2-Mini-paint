@@ -1,37 +1,12 @@
 import React, { useState, useRef, useEffect, useId } from "react";
-import WidthSlider from "../../components/WidthSlider";
 import { useAppSelector } from "../../hooks/redux-hooks";
 import SideBar from "../../components/SideBar/SideBar";
 import { getStorage, ref, uploadBytes, uploadString } from "firebase/storage";
-import {
-  addDoc,
-  collection,
-  doc,
-  setDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
-import SaveDialog from "../../components/SaveDialog";
 import { v4 as uuid } from "uuid";
 import { DrawPageWrapper, CanvasWrapper } from "./DrawPageStyles";
-
-
-type ShapeType = {
-  line: {
-    start: {
-      x: number;
-      y: number;
-    };
-    end: {
-      x: number;
-      y: number;
-    };
-  };
-  figure: string;
-  color: string;
-  mode: string;
-  width: number;
-};
+import { PaletteType, ShapeType } from "../../types";
 
 export default function DrawPage() {
   const [shapes, setShapes] = useState<ShapeType[]>([]);
@@ -49,7 +24,7 @@ export default function DrawPage() {
   const contextRef = useRef<CanvasRenderingContext2D>();
   const coordsRef = useRef({ x: 0, y: 0 });
   const theme: string = useAppSelector((state) => state.theme.currentTheme);
-  const palette: { [key: string]: any } = useAppSelector((state) => {
+  const palette: PaletteType = useAppSelector((state) => {
     if (theme === "light") {
       return state.theme.light;
     } else {

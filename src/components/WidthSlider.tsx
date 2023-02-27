@@ -46,7 +46,7 @@ export default function WidthSlider() {
           <Box width={50}>
             <Slider
               size="small"
-              defaultValue={value}
+              value={value}
               aria-label="Default"
               valueLabelDisplay="auto"
               min={1}
