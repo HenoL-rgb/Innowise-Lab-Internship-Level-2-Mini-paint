@@ -33,8 +33,19 @@ export const HeaderStyled = styled.div`
     }
   }
 
-  input {
-    color: ${props => props.theme.header.font};
+  & .css-v4u5dn-MuiInputBase-root-MuiInput-root:before {
+    border-bottom: 1px solid ${(props) => props.theme.header.font};
+  }
+
+  & .css-v4u5dn-MuiInputBase-root-MuiInput-root {
+    color: ${(props) => props.theme.header.font};
+  }
+
+  & .css-v4u5dn-MuiInputBase-root-MuiInput-root:hover:not(
+      .Mui-disabled,
+      .Mui-error
+    ):before {
+    border-bottom: 2px solid ${(props) => props.theme.header.font};
   }
 
   div {
@@ -54,7 +65,7 @@ export default function Header({ theme }: HeaderProps) {
 
   function handleLogout() {
     dispatch(removeUser());
-    dispatch(setTheme('light'))
+    dispatch(setTheme("light"));
     localStorage.removeItem("userInfo");
   }
 
@@ -76,9 +87,14 @@ export default function Header({ theme }: HeaderProps) {
         <Link to="/">Mini-paint</Link>
       </h2>
       <div>
-        <Box component="form" noValidate autoComplete="off" sx={{
-          color: theme.header.font
-        }}>
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          sx={{
+            color: theme.header.font,
+          }}
+        >
           <TextField
             value={query}
             size="small"
@@ -86,7 +102,7 @@ export default function Header({ theme }: HeaderProps) {
             variant="standard"
             placeholder="Search author"
             onChange={handleQuery}
-            color='primary'
+            color="primary"
           />
         </Box>
         <Tooltip title="Create art">
@@ -98,7 +114,7 @@ export default function Header({ theme }: HeaderProps) {
           </IconButton>
         </Tooltip>
 
-        <AccountMenu onClick={handleLogout} />
+        <AccountMenu theme={theme} onClick={handleLogout} />
       </div>
     </HeaderStyled>
   );

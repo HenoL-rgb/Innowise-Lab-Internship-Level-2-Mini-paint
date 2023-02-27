@@ -44,7 +44,6 @@ const PostWrapper = styled.div`
   }
 `;
 export default function Post({ theme, name, title, image }: PostProps) {
-  console.log(theme)
   return (
     <PostWrapper theme={theme}>
       <Info>

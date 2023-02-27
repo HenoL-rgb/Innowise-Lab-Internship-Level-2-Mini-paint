@@ -45,7 +45,7 @@ const initialState: ThemeType = {
         main: '#121212',
         header: {
             bg: '#1F1B24',
-            font: '#ffffff',
+            font: '#f7f8fa',
             buttons: '#BB86FC',
             logo: '#ffffff'
         },

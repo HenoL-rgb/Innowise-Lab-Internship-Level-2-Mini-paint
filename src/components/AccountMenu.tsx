@@ -17,12 +17,13 @@ import { setTheme } from "../store/slices/themeSlice";
 
 type AccountMenuProps = {
   onClick: () => void;
+  theme: any;
 };
-export default function AccountMenu({ onClick }: AccountMenuProps) {
+export default function AccountMenu({ onClick, theme }: AccountMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
-  const theme = useAppSelector((state) => state.theme.currentTheme);
+  const currentTheme = useAppSelector((state) => state.theme.currentTheme);
   const email = useAppSelector((state) => state.user.email);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -74,6 +75,8 @@ export default function AccountMenu({ onClick }: AccountMenuProps) {
           sx: {
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            bgcolor: theme.header.bg,
+            color: theme.header.font,
             mt: 1.5,
             "& .MuiAvatar-root": {
               width: 32,
@@ -89,7 +92,7 @@ export default function AccountMenu({ onClick }: AccountMenuProps) {
               right: 14,
               width: 10,
               height: 10,
-              bgcolor: "background.paper",
+              bgcolor: theme.header.bg,
               transform: "translateY(-50%) rotate(45deg)",
               zIndex: 0,
             },
@@ -110,14 +113,14 @@ export default function AccountMenu({ onClick }: AccountMenuProps) {
           <LightModeIcon />
           <Switch
             onChange={handleChangeTheme}
-            checked={theme === "dark" ? true : false}
+            checked={currentTheme === "dark" ? true : false}
           />
           <DarkModeIcon />
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <Logout sx={{color: theme.header.font}} fontSize="small" />
           </ListItemIcon>
           Logout
         </MenuItem>
